@@ -1,4 +1,8 @@
-DATASET_DIR = 'C:/Users/Zayd/RecycleNet/RecycleNet/dataset'
+DATASET_DIR = './dataset'
+CHECKPOINT_PATH = './checkpoint/'
+EPOCHS = 10
+STEPS_PER_EPOCH = 30
+BATCH_SIZE = 32
 
 import numpy as np
 import os
@@ -14,8 +18,6 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 nb_classes = 5
 image_input = Input(shape=(224, 224, 3))
-
-
 
 def train_model():
     model = ResNet50(input_tensor=image_input, include_top=True, weights='imagenet')
@@ -35,8 +37,16 @@ def train_model():
     train_generator=train_datagen.flow_from_directory(
                                 DATASET_DIR,
                                 target_size=(224, 224),
-                                batch_size=128,
+                                batch_size=BATCH_SIZE,
                                 class_mode='categorical')
+
+    cp_callback=keras.callbacks.ModelCheckpoint(
+        filepath=CHECKPOINT_PATH,
+        verbose=1,
+        save_weights_only=True,
+        save_best_only=True,
+        monitor='accuracy'
+    )
 
     custom_resnet_model.compile(loss='hinge',
                                 optimizer='adam',
@@ -44,11 +54,10 @@ def train_model():
 
     custom_resnet_model.fit(                    
         train_generator,
-        steps_per_epoch=2000,
-        epochs=10
+        steps_per_epoch=STEPS_PER_EPOCH,
+        epochs=EPOCHS,
+        callbacks=[cp_callback]
     )
-
-
 
 if __name__ == '__main__':
     train_model()
