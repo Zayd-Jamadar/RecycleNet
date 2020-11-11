@@ -1,4 +1,4 @@
-DATASET_DIR = ''
+DATASET_DIR = 'C:/Users/Zayd/RecycleNet/RecycleNet/dataset'
 
 import numpy as np
 import os
@@ -42,11 +42,11 @@ def train_model():
                                 optimizer='adam',
                                 metrics='accuracy', )
 
-    # model.fit(                    // Training the model. To be uncommented only when the dataset is ready and DATASET_DIR has the path to it.
-    #     train_generator,
-    #     steps_per_epoch=2000,
-    #     epochs=10
-    # )
+    custom_resnet_model.fit(                    
+        train_generator,
+        steps_per_epoch=2000,
+        epochs=10
+    )
 
 
 
