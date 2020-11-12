@@ -12,7 +12,7 @@ from resnet50 import ResNet50
 import tensorflow as tf
 from tensorflow import keras
 from keras.models import Model
-from keras.layers import Dense, Input, Activation
+from keras.layers import Dense, Input, Activation, Flatten
 from keras.regularizers import l2
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
@@ -22,13 +22,15 @@ image_input = Input(shape=(224, 224, 3))
 def train_model():
     model = ResNet50(input_tensor=image_input, include_top=True, weights='imagenet')
     last_layer = model.get_layer('avg_pool').output
-    x = Dense(5, name='output_layer',kernel_regularizer=l2(l=0.1))(last_layer)
+    x = Flatten(name='flatten')(last_layer)
+    x = Dense(5, name='output_layer')(x)
     out = Activation('linear')(x)
 
     custom_resnet_model = Model(inputs=image_input, outputs=out)
 
     custom_resnet_model.summary()
 
+    # Comment these two lines before training
     for layer in custom_resnet_model.layers[:-1]:
         layer.trainable=False
 
@@ -49,10 +51,10 @@ def train_model():
     )
 
     custom_resnet_model.compile(loss='hinge',
-                                optimizer='adam',
-                                metrics='accuracy', )
+                                optimizer='adadelta',
+                                metrics=['accuracy'], )
 
-    custom_resnet_model.fit(                    
+    history = custom_resnet_model.fit(                    
         train_generator,
         steps_per_epoch=STEPS_PER_EPOCH,
         epochs=EPOCHS,
