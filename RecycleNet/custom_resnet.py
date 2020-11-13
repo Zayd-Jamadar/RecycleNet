@@ -61,6 +61,12 @@ def train_model():
         callbacks=[cp_callback]
     )
 
+def get_model():
+    model = ResNet50(input_tensor=image_input, include_top=True, weights='imagenet')
+    last_layer = model.get_layer('avg_pool').output
+    custom_resnet_model = Model(inputs=image_input, outputs=last_layer)
+    return custom_resnet_model
+
 if __name__ == '__main__':
     train_model()
 

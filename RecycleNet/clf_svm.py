@@ -1,9 +1,10 @@
 DATASET_DIR = './dataset'
+MODEL_DIR = './trained_models/final_model.sav'
 
 import numpy as np
-from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from feature_extraction import extract_features
+import pickle
 
 C = 1000
 GAMMA = 0.5
@@ -16,7 +17,10 @@ def train_svm():
 
     clf_svm = SVC(C=C, kernel='rbf', gamma=GAMMA)
 
+    print('Now training the extracted features on SVM...')
     clf_svm.fit(X_train, y_train)
+
+    pickle.dump(clf_svm, open(MODEL_DIR, 'rb'))
 
 if __name__ == '__main__':
     train_svm()
