@@ -63,7 +63,7 @@ def train_model():
 
 def get_model():
     model = ResNet50(input_tensor=image_input, include_top=True, weights='imagenet')
-    last_layer = model.get_layer('avg_pool').output
+    last_layer = model.get_layer('activation_48').output
     custom_resnet_model = Model(inputs=image_input, outputs=last_layer)
     return custom_resnet_model
 
