@@ -21,18 +21,12 @@ image_input = Input(shape=(224, 224, 3))
 
 def train_model():
     model = ResNet50(input_tensor=image_input, include_top=True, weights='imagenet')
-    last_layer = model.get_layer('avg_pool').output
-    x = Flatten(name='flatten')(last_layer)
-    x = Dense(5, name='output_layer')(x)
-    out = Activation('linear')(x)
 
-    custom_resnet_model = Model(inputs=image_input, outputs=out)
-
-    custom_resnet_model.summary()
+    model.summary()
 
     # Comment these two lines before training
-    for layer in custom_resnet_model.layers[:-1]:
-        layer.trainable=False
+    # for layer in model.layers[:-1]:
+    #     layer.trainable=False
 
     train_datagen = ImageDataGenerator(rescale=1./255)
 
@@ -50,11 +44,11 @@ def train_model():
         monitor='accuracy'
     )
 
-    custom_resnet_model.compile(loss='hinge',
+    model.compile(loss='hinge',
                                 optimizer='adadelta',
                                 metrics=['accuracy'], )
 
-    history = custom_resnet_model.fit(                    
+    history = model.fit(                    
         train_generator,
         steps_per_epoch=STEPS_PER_EPOCH,
         epochs=EPOCHS,
