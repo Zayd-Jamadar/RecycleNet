@@ -67,7 +67,7 @@ def train_model():
     )
 
 def get_model():
-    latest = tf.train.latest_checkpoint(checkpoint_dir)
+    latest = tf.train.latest_checkpoint(CHECKPOINT_PATH)
     model = ResNet50(input_tensor=image_input, include_top=True, weights=None)
     model.load_weights(latest)
     return model
