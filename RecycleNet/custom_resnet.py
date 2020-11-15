@@ -67,10 +67,10 @@ def train_model():
     )
 
 def get_model():
-    model = ResNet50(input_tensor=image_input, include_top=True, weights='imagenet')
-    last_layer = model.get_layer('activation_48').output
-    custom_resnet_model = Model(inputs=image_input, outputs=last_layer)
-    return custom_resnet_model
+    latest = tf.train.latest_checkpoint(checkpoint_dir)
+    model = ResNet50(input_tensor=image_input, include_top=True, weights=None)
+    model.load_weights(latest)
+    return model
 
 if __name__ == '__main__':
     train_model()
