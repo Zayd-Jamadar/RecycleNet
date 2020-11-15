@@ -1,4 +1,4 @@
-DATASET_DIR = './dataset'
+TRAIN_DIR = './dataset/train'
 CHECKPOINT_PATH = './checkpoint/'
 EPOCHS = 10
 STEPS_PER_EPOCH = 30
@@ -31,7 +31,7 @@ def train_model():
     train_datagen = ImageDataGenerator(rescale=1./255)
 
     train_generator=train_datagen.flow_from_directory(
-                                DATASET_DIR,
+                                TRAIN_DIR,
                                 target_size=(224, 224),
                                 batch_size=BATCH_SIZE,
                                 class_mode='categorical')
@@ -45,8 +45,8 @@ def train_model():
     )
 
     model.compile(loss='hinge',
-                                optimizer='adadelta',
-                                metrics=['accuracy'], )
+                optimizer='adadelta',
+                metrics=['accuracy'],)
 
     history = model.fit(                    
         train_generator,
