@@ -1,5 +1,6 @@
 TRAIN_DIR = './dataset/train'
 CHECKPOINT_PATH = './checkpoint/'
+LATEST_CHECKPOINT = './checkpoint/15/11/2020--18:55/'
 EPOCHS = 10
 STEPS_PER_EPOCH = 30
 BATCH_SIZE = 32
@@ -70,7 +71,9 @@ def get_model():
     latest = tf.train.latest_checkpoint(CHECKPOINT_PATH)
     model = ResNet50(input_tensor=image_input, include_top=True, weights=None)
     model.load_weights(latest)
-    return model
+    last_layer = model.get_layer('activation_48').output
+    custom_resnet_model = Model(inputs=image_input, outputs=last_layer)
+    return custom_resnet_model
 
 if __name__ == '__main__':
     train_model()
