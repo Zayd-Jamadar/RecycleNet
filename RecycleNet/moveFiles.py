@@ -75,3 +75,74 @@ if(len(os.listdir('dataset/train/plastic')) != 340):
 		CUR_DIRECTORY+'/dataset/train/plastic/'+choice)
 	print(len(os.listdir('dataset/train/plastic')))
 
+cardboard = os.listdir('dataset/cardboard')
+glass = os.listdir('dataset/glass')
+metal = os.listdir('dataset/metal')
+paper = os.listdir('dataset/paper')
+plastic = os.listdir('dataset/plastic')
+
+thirty_cardboard = len(cardboard)
+thirty_glass = len(glass)
+thirty_metal = len(metal)
+thirty_paper = len(paper)
+thirty_plastic = len(plastic)
+print(thirty_cardboard)
+print(thirty_glass)
+print(thirty_metal)
+print(thirty_paper)
+print(thirty_plastic)
+
+if(thirty_cardboard!=0):
+	for x in cardboard:
+		os.rename(CUR_DIRECTORY+'/dataset/cardboard/'+x,
+		CUR_DIRECTORY+'/dataset/test/cardboard/'+x)
+	print(len(os.listdir('dataset/test/cardboard')))
+
+if(thirty_glass!=0):
+	for x in glass:
+		os.rename(CUR_DIRECTORY+'/dataset/glass/'+x,
+		CUR_DIRECTORY+'/dataset/test/glass/'+x)
+	print(len(os.listdir('dataset/test/glass')))
+
+if(thirty_metal!=0):
+	for x in metal:
+		os.rename(CUR_DIRECTORY+'/dataset/metal/'+x,
+		CUR_DIRECTORY+'/dataset/test/metal/'+x)
+	print(len(os.listdir('dataset/test/metal')))
+
+if(thirty_paper!=0):
+	for x in paper:
+		os.rename(CUR_DIRECTORY+'/dataset/paper/'+x,
+		CUR_DIRECTORY+'/dataset/test/paper/'+x)
+	print(len(os.listdir('dataset/test/paper')))
+
+if(thirty_plastic!=0):
+	for x in plastic:
+		os.rename(CUR_DIRECTORY+'/dataset/plastic/'+x,
+		CUR_DIRECTORY+'/dataset/test/plastic/'+x)
+	print(len(os.listdir('dataset/test/plastic')))
+
+try:
+	os.rmdir('dataset/cardboard')
+except OSError as e:
+	print("Error: %s : %s" % (dir_path, e.strerror))
+
+try:
+	os.rmdir('dataset/glass')
+except OSError as e:
+	print("Error: %s : %s" % (dir_path, e.strerror))
+
+try:
+	os.rmdir('dataset/metal')
+except OSError as e:
+	print("Error: %s : %s" % (dir_path, e.strerror))
+
+try:
+	os.rmdir('dataset/paper')
+except OSError as e:
+	print("Error: %s : %s" % (dir_path, e.strerror))
+	
+try:
+	os.rmdir('dataset/plastic')
+except OSError as e:
+	print("Error: %s : %s" % (dir_path, e.strerror))
