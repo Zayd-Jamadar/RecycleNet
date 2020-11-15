@@ -55,7 +55,7 @@ def train_model():
                             weight_decay=0.0001,
                             momentum=0.9)
 
-    custom_resnet_model.compile(loss='hinge',
+    custom_resnet_model.compile(loss='categorical_crossentropy',
                                 optimizer=opt,
                                 metrics=['accuracy'],)
 
