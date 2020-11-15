@@ -16,7 +16,7 @@ MODEL_DIR = './trained_models/' + FILE_NAME
 
 C = 1000
 GAMMA = 0.5
-sample_count = 1504
+sample_count = 1050
 
 def plot_cf(y_pred, y_test):
     print('\nAccuracy: {:.2f}\n'.format(accuracy_score(y_test, y_pred)))
