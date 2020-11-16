@@ -1,6 +1,7 @@
 TRAIN_DIR = './dataset/train'
-CHECKPOINT_PATH = './checkpoint/'
-LATEST_CHECKPOINT = './checkpoint/15/11/2020--18:55/'
+# CHECKPOINT_PATH = './checkpoint/training_1'
+# LATEST_CHECKPOINT = './checkpoint/15/11/2020--18:55/'
+
 EPOCHS = 10
 STEPS_PER_EPOCH = 30
 BATCH_SIZE = 32
@@ -20,6 +21,9 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 nb_classes = 5
 image_input = Input(shape=(224, 224, 3))
+
+partial_path = "./trained_models/partial/"
+# partial_dir = os.path.dirname(partial_path)
 
 def train_model():
     model = ResNet50(input_tensor=image_input, include_top=True, weights='imagenet')
@@ -44,13 +48,15 @@ def train_model():
                                 batch_size=BATCH_SIZE,
                                 class_mode='categorical')
 
-    cp_callback=keras.callbacks.ModelCheckpoint(
-        filepath=CHECKPOINT_PATH,
-        verbose=1,
-        save_weights_only=True,
-        save_best_only=True,
-        monitor='accuracy'
-    )
+
+
+    # cp_callback=keras.callbacks.ModelCheckpoint(
+    #     filepath=CHECKPOINT_PATH,
+    #     verbose=1,
+    #     save_weights_only=True,
+    #     save_best_only=True,
+    #     monitor='accuracy'
+    # )
 
     opt = tfa.optimizers.SGDW(learning_rate = 0.01, 
                             weight_decay=0.0001,
@@ -64,15 +70,19 @@ def train_model():
         train_generator,
         steps_per_epoch=STEPS_PER_EPOCH,
         epochs=EPOCHS,
-        callbacks=[cp_callback]
+        # callbacks=[cp_callback]
     )
 
+    # custom_resnet_model.save_weights(partial_dir)
+    custom_resnet_model.save(partial_path)
+
 def get_model():
-    latest = tf.train.latest_checkpoint(CHECKPOINT_PATH)
-    model = ResNet50(input_tensor=image_input, include_top=True, weights=None)
-    model.load_weights(latest)
+    # latest = tf.train.latest_checkpoint(checkpoint_dir)
+    # model = ResNet50(input_tensor=image_input, include_top=True, weights=None)
+    model = tf.keras.models.load_model(partial_path)
     last_layer = model.get_layer('activation_48').output
     custom_resnet_model = Model(inputs=image_input, outputs=last_layer)
+    custom_resnet_model.summary()
     return custom_resnet_model
 
 if __name__ == '__main__':
