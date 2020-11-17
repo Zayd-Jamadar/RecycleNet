@@ -36,7 +36,7 @@ def plot_cf(y_pred, y_test):
 def train_svm():
     print(FILE_NAME)
     svm_features, svm_labels = extract_features(DATASET_DIR,sample_count)
-    X = svm_features.reshape(1504, 7*7*2048)
+    X = svm_features.reshape(1050, 7*7*2048)
     y = svm_labels
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)

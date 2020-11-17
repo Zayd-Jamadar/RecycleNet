@@ -2,9 +2,9 @@ TRAIN_DIR = './dataset/train'
 # CHECKPOINT_PATH = './checkpoint/training_1'
 # LATEST_CHECKPOINT = './checkpoint/15/11/2020--18:55/'
 
-EPOCHS = 10
+EPOCHS = 12
 STEPS_PER_EPOCH = 30
-BATCH_SIZE = 32
+BATCH_SIZE = 12
 
 import numpy as np
 import os
@@ -26,10 +26,10 @@ partial_path = "./trained_models/partial/"
 # partial_dir = os.path.dirname(partial_path)
 
 def train_model():
-    model = ResNet50(input_tensor=image_input, include_top=True, weights='imagenet')
+    model = ResNet50(input_tensor=image_input, include_top=False, weights='imagenet')
     last_layer = model.get_layer('avg_pool').output
-    x = Flatten(name='flatten')(last_layer)
-    out = Dense(5, name='output_layer')(x)
+    x = Flatten()(last_layer)
+    out = Dense(5, name='output_layer', activation='softmax')(x)
 
     custom_resnet_model = Model(inputs=image_input, outputs=out)
 
@@ -79,15 +79,20 @@ def train_model():
 def get_model():
     # latest = tf.train.latest_checkpoint(checkpoint_dir)
     # model = ResNet50(input_tensor=image_input, include_top=True, weights=None)
-    model = keras.models.load_model(partial_path)
-    m = keras.Sequential()
-    for l in model.layers[0:176]:
-        m.add(l)
+    # model = keras.models.load_model(partial_path)
+    # m = keras.Sequential()
+    # for l in model.layers[0:176]:
+    #     m.add(l)
 
     #     last_layer = model.get_layer('activation_48').output
     # custom_resnet_model = Model(inputs=image_input, outputs=last_layer)
     # custom_resnet_model.summary()
-    return m
+
+    model = keras.models.load_model(partial_path)
+    layer_name = 'activation_48'
+    custom_resnet_model = Model(inputs=model.input, outputs=model.get_layer(layer_name).output)
+    custom_resnet_model.summary()
+    return custom_resnet_model
 
 if __name__ == '__main__':
     train_model()
