@@ -130,3 +130,4 @@ dmypy.json
 
 # Custom Trained Model
 RecycleNet/checkpoint
+RecycleNet/trained_models
