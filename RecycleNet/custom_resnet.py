@@ -12,7 +12,7 @@ import time
 from resnet50 import ResNet50
 
 import tensorflow as tf
-import tensorflow_addons as tfa
+# import tensorflow_addons as tfa
 from tensorflow import keras
 from keras.models import Model
 from keras.layers import Dense, Input, Activation, Flatten
@@ -65,9 +65,11 @@ def train_model():
     #     monitor='accuracy'
     # )
 
-    opt = tfa.optimizers.SGDW(learning_rate = 0.01, 
-                            weight_decay=0.0001,
-                            momentum=0.9)
+    # opt = tfa.optimizers.SGDW(learning_rate = 0.01, 
+    #                         weight_decay=0.0001,
+    #                         momentum=0.9)
+
+    opt = tf.keras.optimizers.SGD(learning_rate=0.01, momentum=0.9, nesterov=True, name='SGD')
 
     custom_resnet_model.compile(loss='categorical_crossentropy',
                                 optimizer=opt,
@@ -96,7 +98,7 @@ def get_model():
     # custom_resnet_model.summary()
 
     model = keras.models.load_model(partial_path)
-    layer_name = 'activation_48'
+    layer_name = 'res5c_branch2c'
     custom_resnet_model = Model(inputs=model.input, outputs=model.get_layer(layer_name).output)
     custom_resnet_model.summary()
     return custom_resnet_model
