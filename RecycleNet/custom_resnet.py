@@ -29,7 +29,7 @@ def train_model():
     model = ResNet50(input_tensor=image_input, include_top=False, weights='imagenet')
     last_layer = model.get_layer('avg_pool').output
     x = Flatten()(last_layer)
-    out = Dense(5, name='output_layer', activation='softmax')(x)
+    out = Dense(5, name='output_layer', activation=tf.nn.softmax)(x)
 
     custom_resnet_model = Model(inputs=image_input, outputs=out)
 
@@ -40,7 +40,14 @@ def train_model():
     # for layer in model.layers[:-1]:
     #     layer.trainable=False
 
-    train_datagen = ImageDataGenerator(rescale=1./255)
+    train_datagen = ImageDataGenerator(rescale=1./255,
+                                       rotation_range=40,
+                                       width_shift_range=0.2,
+                                       height_shift_range=0.2,
+                                       shear_range=0.2,
+                                       zoom_range=0.2,
+                                       horizontal_flip=True,
+                                       fill_mode='nearest')
 
     train_generator=train_datagen.flow_from_directory(
                                 TRAIN_DIR,
