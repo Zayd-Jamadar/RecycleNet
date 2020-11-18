@@ -10,6 +10,7 @@ import numpy as np
 import os
 import time
 from resnet50 import ResNet50
+import matplotlib.pyplot as plt
 
 import tensorflow as tf
 import tensorflow_addons as tfa
@@ -24,6 +25,14 @@ image_input = Input(shape=(224, 224, 3))
 
 partial_path = "./trained_models/partial/"
 # partial_dir = os.path.dirname(partial_path)
+
+def plot_graph(history):
+    plt.plot(history.history['accuracy'], label='accuracy')
+    # plt.plot(history.history['val_accuracy'], label='val_accuracy')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.ylim([0.5, 1])
+    plt.legend(loc='lower right')
 
 def train_model():
     model = ResNet50(input_tensor=image_input, include_top=False, weights='imagenet')
@@ -79,6 +88,7 @@ def train_model():
         epochs=EPOCHS,
         # callbacks=[cp_callback]
     )
+    plot_graph(history)
 
     # custom_resnet_model.save_weights(partial_dir)
     custom_resnet_model.save(partial_path)
