@@ -2,9 +2,9 @@ TRAIN_DIR = './dataset/train'
 # CHECKPOINT_PATH = './checkpoint/training_1'
 # LATEST_CHECKPOINT = './checkpoint/15/11/2020--18:55/'
 
-EPOCHS = 12
+EPOCHS = 30
 STEPS_PER_EPOCH = 30
-BATCH_SIZE = 30
+BATCH_SIZE = 12
 
 import numpy as np
 import os
@@ -19,6 +19,9 @@ from keras.models import Model
 from keras.layers import Dense, Input, Activation, Flatten
 from keras.regularizers import l2
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+# gpu = tf.config.experimental.list_physical_devices('GPU')
+# tf.config.experimental.set_memory_growth(gpu[0], True)
 
 nb_classes = 5
 image_input = Input(shape=(224, 224, 3))
