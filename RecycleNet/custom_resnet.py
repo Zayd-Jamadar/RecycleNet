@@ -47,9 +47,9 @@ def train_model():
     # custom_resnet_model = get_model()
     custom_resnet_model.summary()
 
-    # Comment these two lines before training
-    # for layer in model.layers[:-1]:
-    #     layer.trainable=False
+    #Comment these two lines before training
+    for layer in custom_resnet_model.layers[:-1]:
+        layer.trainable=False
 
     train_datagen = ImageDataGenerator(rescale=1./255,
                                        rotation_range=40,
