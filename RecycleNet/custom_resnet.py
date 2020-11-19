@@ -28,6 +28,9 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 nb_classes = 5
 image_input = Input(shape=(224, 224, 3))
 
+timestr = time.strftime("%Y-%m-%d_%H:%M:%S")
+GraphDir = './imgs/graphs/'
+
 partial_path = "./trained_models/partial/"
 # partial_dir = os.path.dirname(partial_path)
 
@@ -40,7 +43,7 @@ def plot_graph(history):
     plt.ylim([0.5, 1])
     plt.legend(loc='lower right')
     plt.show()
-    plt.savefig('graph')
+    plt.savefig(GraphDir+timestr)
 
 def train_model():
     model = ResNet50(input_tensor=image_input, include_top=False, weights='imagenet')
