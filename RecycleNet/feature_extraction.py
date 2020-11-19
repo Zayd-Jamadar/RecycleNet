@@ -3,7 +3,7 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.layers import Input
 from custom_resnet import get_model
 
-BATCH_SIZE = 32
+BATCH_SIZE = 12
 IMG_WIDTH = 224
 IMG_HEIGHT = 224
 

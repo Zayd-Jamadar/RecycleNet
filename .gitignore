@@ -132,3 +132,4 @@ dmypy.json
 RecycleNet/checkpoint
 RecycleNet/logs
 RecycleNet/trained_models
+RecycleNet/imgs

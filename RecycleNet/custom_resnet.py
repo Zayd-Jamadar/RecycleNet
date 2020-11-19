@@ -3,7 +3,7 @@ TRAIN_DIR = './dataset/train'
 # LATEST_CHECKPOINT = './checkpoint/15/11/2020--18:55/'
 LOGS_DIR = './logs/'
 
-EPOCHS = 12
+EPOCHS = 30
 STEPS_PER_EPOCH = 30
 BATCH_SIZE = 12
 
@@ -22,19 +22,28 @@ from keras.layers import Dense, Input, Activation, Flatten
 from keras.regularizers import l2
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
+# gpu = tf.config.experimental.list_physical_devices('GPU')
+# tf.config.experimental.set_memory_growth(gpu[0], True)
+
 nb_classes = 5
 image_input = Input(shape=(224, 224, 3))
+
+timestr = time.strftime("%Y-%m-%d_%H:%M:%S")
+GraphDir = './imgs/graphs/'
 
 partial_path = "./trained_models/partial/"
 # partial_dir = os.path.dirname(partial_path)
 
 def plot_graph(history):
     plt.plot(history.history['accuracy'], label='accuracy')
+    plt.plot(history.history['loss'], label='loss')
     # plt.plot(history.history['val_accuracy'], label='val_accuracy')
     plt.xlabel('Epoch')
     plt.ylabel('Accuracy')
     plt.ylim([0.5, 1])
     plt.legend(loc='lower right')
+    plt.show()
+    plt.savefig(GraphDir+timestr)
 
 def train_model():
     model = ResNet50(input_tensor=image_input, include_top=False, weights='imagenet')
