@@ -4,7 +4,7 @@ TRAIN_DIR = './dataset/train'
 
 EPOCHS = 12
 STEPS_PER_EPOCH = 30
-BATCH_SIZE = 12
+BATCH_SIZE = 30
 
 import numpy as np
 import os
@@ -28,11 +28,14 @@ partial_path = "./trained_models/partial/"
 
 def plot_graph(history):
     plt.plot(history.history['accuracy'], label='accuracy')
+    plt.plot(history.history['loss'], label='loss')
     # plt.plot(history.history['val_accuracy'], label='val_accuracy')
     plt.xlabel('Epoch')
     plt.ylabel('Accuracy')
     plt.ylim([0.5, 1])
     plt.legend(loc='lower right')
+    plt.show()
+    plt.savefig('graph')
 
 def train_model():
     model = ResNet50(input_tensor=image_input, include_top=False, weights='imagenet')
@@ -62,7 +65,7 @@ def train_model():
                                 TRAIN_DIR,
                                 target_size=(224, 224),
                                 batch_size=BATCH_SIZE,
-                                class_mode='categorical')
+                                class_mode='sparse')
 
 
 
@@ -80,7 +83,7 @@ def train_model():
 
     opt = tf.keras.optimizers.SGD(learning_rate=0.01, momentum=0.9, nesterov=True, name='SGD')
 
-    custom_resnet_model.compile(loss='categorical_crossentropy',
+    custom_resnet_model.compile(loss='sparse_categorical_crossentropy',
                                 optimizer=opt,
                                 metrics=['accuracy'],)
 
