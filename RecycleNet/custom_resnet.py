@@ -1,6 +1,7 @@
 TRAIN_DIR = './dataset/train'
 # CHECKPOINT_PATH = './checkpoint/training_1'
 # LATEST_CHECKPOINT = './checkpoint/15/11/2020--18:55/'
+LOGS_DIR = './logs/'
 
 EPOCHS = 12
 STEPS_PER_EPOCH = 30
@@ -8,6 +9,7 @@ BATCH_SIZE = 12
 
 import numpy as np
 import os
+import datetime
 import time
 from resnet50 import ResNet50
 import matplotlib.pyplot as plt
@@ -62,7 +64,7 @@ def train_model():
                                 TRAIN_DIR,
                                 target_size=(224, 224),
                                 batch_size=BATCH_SIZE,
-                                class_mode='categorical')
+                                class_mode='sparse')
 
 
 
@@ -80,7 +82,10 @@ def train_model():
 
     opt = tf.keras.optimizers.SGD(learning_rate=0.01, momentum=0.9, nesterov=True, name='SGD')
 
-    custom_resnet_model.compile(loss='categorical_crossentropy',
+    log_dir = LOGS_DIR + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+
+    custom_resnet_model.compile(loss='sparse_categorical_crossentropy',
                                 optimizer=opt,
                                 metrics=['accuracy'],)
 
@@ -88,7 +93,7 @@ def train_model():
         train_generator,
         steps_per_epoch=STEPS_PER_EPOCH,
         epochs=EPOCHS,
-        # callbacks=[cp_callback]
+        callbacks=[tensorboard_callback]
     )
     plot_graph(history)
 
