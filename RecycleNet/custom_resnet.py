@@ -9,7 +9,7 @@ import tensorflow as tf
 import tensorflow_addons as tfa
 from tensorflow import keras
 from keras.models import Model
-from keras.layers import Dense, Input, Activation, Flatten
+from keras.layers import Dense, Input, Activation, Flatten, Dropout
 from keras.regularizers import l2
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
@@ -23,6 +23,8 @@ def train_model():
     model = ResNet50(input_tensor=image_input, include_top=False, weights='imagenet')
     last_layer = model.get_layer('avg_pool').output
     x = Flatten()(last_layer)
+    x = Dense(256, name='dense', activation='relu')(x)
+    x = Dropout(0.5)(x)
     out = Dense(5, name='output_layer', activation='softmax')(x)
 
     custom_resnet_model = Model(inputs=image_input, outputs=out)
