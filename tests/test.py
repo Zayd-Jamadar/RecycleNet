@@ -5,5 +5,6 @@ from tensorflow import keras
 
 def test():
     model = keras.models.load_model(partial_path)
-    
+    flag = 1
+    assert(flag==1)
     
