@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import config
 
 import tensorflow as tf
-# import tensorflow_addons as tfa
+import tensorflow_addons as tfa
 from tensorflow import keras
 from keras.models import Model
 from keras.layers import Dense, Input, Activation, Flatten
@@ -52,11 +52,11 @@ def train_model():
                                 batch_size=config.BATCH_SIZE,
                                 class_mode='sparse')
 
-    # opt = tfa.optimizers.SGDW(learning_rate = 0.01,
-    #                         weight_decay=0.0001,
-    #                         momentum=0.9)
+    opt = tfa.optimizers.SGDW(learning_rate = 0.01,
+                            weight_decay=0.0001,
+                            momentum=0.9)
 
-    opt = tf.keras.optimizers.SGD(learning_rate=0.01, momentum=0.9, nesterov=True, name='SGD')
+    # opt = tf.keras.optimizers.SGD(learning_rate=0.01, momentum=0.9, nesterov=True, name='SGD')
 
     log_dir = config.LOGS_DIR + '/' + datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
