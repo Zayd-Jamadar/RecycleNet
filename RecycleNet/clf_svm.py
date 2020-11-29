@@ -2,9 +2,12 @@ import os
 import time
 import numpy as np
 from sklearn.svm import SVC
+
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import plot_confusion_matrix
+
 from feature_extraction import extract_features
 import pickle
 
@@ -12,11 +15,31 @@ date_string = time.strftime("%Y-%m-%d-%H:%M")
 
 DATASET_DIR = './dataset/train'
 FILE_NAME = 'resnet_svm_' + date_string + '.sav'
-MODEL_DIR = './trained_models/' + FILE_NAME
+MODEL_DIR = './trained_models/ResNet_SVM' + FILE_NAME
+GraphDir = './imgs/graphs/confusion_matrix'
+
+timestr = time.strftime("%Y-%m-%d_%H:%M:%S")
 
 C = 1000
 GAMMA = 0.5
 sample_count = 1050
+
+def plot_cm(clf_svm, X_test, y_test):
+    np.set_printoptions(precision=2)
+
+    titles_options = [("Confusion matrix, without normalization", None),
+                      ("Normalized confusion matrix", "true")]
+    for title, normalize in titles_options:
+        disp = plot_confusion_matrix(clf_svm, X_test, y_test,
+                                     cmap=plt.cm.Blues,
+                                     normalize=normalize)
+        disp.ax_.set_title(title)
+
+        print(title)
+        print(disp.confusion_matrix)
+
+    plt.savefig(GraphDir+timestr)
+    plt.show()
 
 def plot_cf(y_pred, y_test):
     print('\nAccuracy: {:.2f}\n'.format(accuracy_score(y_test, y_pred)))
@@ -53,6 +76,8 @@ def train_svm():
 
     print("Model is trained. Plotting metrics...")
     plot_cf(y_pred, y_test)
+
+    plot_cm(clf_svm, X_test, y_test)
 
 if __name__ == '__main__':
     print('Now training the extracted features on SVM...')
