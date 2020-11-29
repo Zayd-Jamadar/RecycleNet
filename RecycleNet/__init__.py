@@ -1,4 +1,4 @@
-from RecycleNet.config import config
+import config
 
 VERSION_PATH = config.PACKAGE_ROOT / 'VERSION'
 

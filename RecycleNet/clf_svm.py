@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from sklearn.metrics import plot_confusion_matrix
 
 from feature_extraction import extract_features
-from RecycleNet.config import config
+import config
 
 import pickle
 
@@ -65,7 +65,7 @@ def train_svm():
     clf_svm.fit(X_train, y_train)
 
     os.makedirs(os.path.dirname(config.TRAINED_MODEL_DIR_SVM+FILE_NAME), exist_ok=True)
-    pickle.dump(clf_svm, open(MODEL_DIR, 'wb'))
+    pickle.dump(clf_svm, open(config.TRAINED_MODEL_DIR_SVM+FILE_NAME, 'wb'))
 
     y_pred = clf_svm.predict(X_test)
 

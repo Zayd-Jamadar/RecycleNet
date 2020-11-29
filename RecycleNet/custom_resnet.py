@@ -3,7 +3,7 @@ import datetime
 import time
 from resnet50 import ResNet50
 import matplotlib.pyplot as plt
-from RecycleNet.config import config
+import config
 
 import tensorflow as tf
 # import tensorflow_addons as tfa
