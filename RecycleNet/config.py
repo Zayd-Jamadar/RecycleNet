@@ -1,7 +1,4 @@
-import pathlib
-import RecycleNet
-
-PACKAGE_ROOT = pathlib.Path(RecycleNet.__file__).resolve().parent
+PACKAGE_ROOT = "./"
 DATASET_DIR = PACKAGE_ROOT / "dataset"
 TRAIN_DIR = DATASET_DIR / "train"
 TEST_DIR = DATASET_DIR / "test"

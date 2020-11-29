@@ -2,7 +2,7 @@ import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
 from keras.layers import Input
 from custom_resnet import get_model
-from RecycleNet.config import config
+import config
 
 image_input = Input(shape=(224, 224, 3))
 model = get_model()
