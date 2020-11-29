@@ -14,10 +14,7 @@ import pickle
 
 date_string = time.strftime("%Y-%m-%d-%H:%M")
 
-DATASET_DIR = './dataset/train'
 FILE_NAME = 'resnet_svm_' + date_string + '.sav'
-MODEL_DIR = './trained_models/ResNet_SVM' + FILE_NAME
-GraphDir = './imgs/graphs/confusion_matrix'
 
 timestr = time.strftime("%Y-%m-%d_%H:%M:%S")
 
@@ -35,7 +32,7 @@ def plot_cm(clf_svm, X_test, y_test):
         print(title)
         print(disp.confusion_matrix)
 
-    plt.savefig(GraphDir+timestr)
+    plt.savefig(config.GRAPHDIR_CM+timestr)
     plt.show()
 
 def plot_cf(y_pred, y_test):
@@ -55,7 +52,7 @@ def plot_cf(y_pred, y_test):
 
 def train_svm():
     print(FILE_NAME)
-    svm_features, svm_labels = extract_features(DATASET_DIR,config.sample_count)
+    svm_features, svm_labels = extract_features(config.TRAIN_DIR,config.sample_count)
     X = svm_features.reshape(config.sample_count, 7*7*2048)
     y = svm_labels
 
@@ -66,7 +63,7 @@ def train_svm():
     print("Fitting the model...")
     clf_svm.fit(X_train, y_train)
 
-    os.makedirs(os.path.dirname(MODEL_DIR), exist_ok=True)
+    os.makedirs(os.path.dirname(config.TRAINED_MODEL_DIR_SVM+FILE_NAME), exist_ok=True)
     pickle.dump(clf_svm, open(MODEL_DIR, 'wb'))
 
     y_pred = clf_svm.predict(X_test)

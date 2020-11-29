@@ -19,9 +19,6 @@ image_input = Input(shape=(224, 224, 3))
 
 timestr = time.strftime("%Y-%m-%d_%H:%M:%S")
 
-
-partial_path = "./trained_models/partial/"
-
 def train_model():
     model = ResNet50(input_tensor=image_input, include_top=False, weights='imagenet')
     last_layer = model.get_layer('avg_pool').output
