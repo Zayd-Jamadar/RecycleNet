@@ -58,7 +58,7 @@ def train_model():
 
     opt = tf.keras.optimizers.SGD(learning_rate=0.01, momentum=0.9, nesterov=True, name='SGD')
 
-    log_dir = config.LOGS_DIR + datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+    log_dir = config.LOGS_DIR + '/' + datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 
     custom_resnet_model.compile(loss='sparse_categorical_crossentropy',
