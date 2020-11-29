@@ -8,6 +8,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.metrics import plot_confusion_matrix
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import classification_report
 
 from feature_extraction import extract_features
 import config
@@ -75,6 +77,36 @@ def train_svm():
 
     plot_cm(clf_svm, X_test, y_test)
 
+def grid_search():
+    print(FILE_NAME)
+    svm_features, svm_labels = extract_features(config.TRAIN_DIR,config.sample_count)
+    X = svm_features.reshape(config.sample_count, 7*7*2048)
+    y = svm_labels
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # defining parameter range 
+    param_grid = {'C': [0.1, 1, 10, 100, 1000],  
+                  'gamma': [1, 0.1, 0.01, 0.001, 0.0001], 
+                  'kernel': ['rbf']}  
+      
+    grid = GridSearchCV(SVC(), param_grid, refit = True, verbose = 3) 
+      
+    # fitting the model for grid search 
+    grid.fit(X_train, y_train)
+
+    # print best parameter after tuning 
+    print(grid.best_params_) 
+      
+    # print how our model looks after hyper-parameter tuning 
+    print(grid.best_estimator_) 
+
+    grid_predictions = grid.predict(X_test) 
+  
+    # print classification report 
+    print(classification_report(y_test, grid_predictions)) 
+
 if __name__ == '__main__':
     print('Now training the extracted features on SVM...')
     train_svm()
+    # grid_search()
