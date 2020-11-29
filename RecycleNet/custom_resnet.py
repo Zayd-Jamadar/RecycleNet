@@ -3,9 +3,9 @@ TRAIN_DIR = './dataset/train'
 # LATEST_CHECKPOINT = './checkpoint/15/11/2020--18:55/'
 LOGS_DIR = './logs/'
 
-EPOCHS = 30
+EPOCHS = 12
 STEPS_PER_EPOCH = 30
-BATCH_SIZE = 12
+BATCH_SIZE = 32
 
 import numpy as np
 import os
@@ -15,7 +15,7 @@ from resnet50 import ResNet50
 import matplotlib.pyplot as plt
 
 import tensorflow as tf
-# import tensorflow_addons as tfa
+import tensorflow_addons as tfa
 from tensorflow import keras
 from keras.models import Model
 from keras.layers import Dense, Input, Activation, Flatten
@@ -40,7 +40,7 @@ def plot_graph(history):
     # plt.plot(history.history['val_accuracy'], label='val_accuracy')
     plt.xlabel('Epoch')
     plt.ylabel('Accuracy')
-    plt.ylim([0.5, 1])
+    plt.ylim([0.01, 1])
     plt.legend(loc='lower right')
     plt.show()
     plt.savefig(GraphDir+timestr)
@@ -49,7 +49,7 @@ def train_model():
     model = ResNet50(input_tensor=image_input, include_top=False, weights='imagenet')
     last_layer = model.get_layer('avg_pool').output
     x = Flatten()(last_layer)
-    out = Dense(5, name='output_layer', activation=tf.nn.softmax)(x)
+    out = Dense(5, name='output_layer', activation='softmax')(x)
 
     custom_resnet_model = Model(inputs=image_input, outputs=out)
 
@@ -57,8 +57,8 @@ def train_model():
     custom_resnet_model.summary()
 
     #Comment these two lines before training
-    for layer in custom_resnet_model.layers[:-1]:
-        layer.trainable=False
+    # for layer in custom_resnet_model.layers[:-1]:
+    #     layer.trainable=False
 
     train_datagen = ImageDataGenerator(rescale=1./255,
                                        rotation_range=40,
@@ -85,13 +85,13 @@ def train_model():
     #     monitor='accuracy'
     # )
 
-    # opt = tfa.optimizers.SGDW(learning_rate = 0.01, 
+    # opt = tfa.optimizers.SGDW(learning_rate = 0.01,
     #                         weight_decay=0.0001,
     #                         momentum=0.9)
 
     opt = tf.keras.optimizers.SGD(learning_rate=0.01, momentum=0.9, nesterov=True, name='SGD')
 
-    log_dir = LOGS_DIR + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    log_dir = LOGS_DIR + datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 
     custom_resnet_model.compile(loss='sparse_categorical_crossentropy',

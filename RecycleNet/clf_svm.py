@@ -10,7 +10,7 @@ import pickle
 
 date_string = time.strftime("%Y-%m-%d-%H:%M")
 
-DATASET_DIR = './dataset/test'
+DATASET_DIR = './dataset/train'
 FILE_NAME = 'resnet_svm_' + date_string + '.sav'
 MODEL_DIR = './trained_models/' + FILE_NAME
 
