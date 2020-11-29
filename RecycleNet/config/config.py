@@ -28,4 +28,3 @@ sample_count = 1050
 
 IMG_WIDTH = 224
 IMG_HEIGHT = 224
-

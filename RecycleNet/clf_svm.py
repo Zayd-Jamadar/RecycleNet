@@ -10,6 +10,7 @@ from sklearn.metrics import plot_confusion_matrix
 
 from feature_extraction import extract_features
 from RecycleNet.config import config
+
 import pickle
 
 date_string = time.strftime("%Y-%m-%d-%H:%M")
