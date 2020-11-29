@@ -9,7 +9,14 @@ import config
 image_input = Input(shape=(224, 224, 3))
 model = get_model()
 
-datagen = ImageDataGenerator(rescale=1./255)
+datagen = ImageDataGenerator(rescale=1./255,
+                             rotation_range=40,
+                             width_shift_range=0.2,
+                             height_shift_range=0.2,
+                             shear_range=0.2,
+                             zoom_range=0.2,
+                             horizontal_flip=True,
+                             fill_mode='nearest')
 
 def extract_features(directory, sample_count):
     features = np.zeros(shape=(sample_count,7,7,2048))

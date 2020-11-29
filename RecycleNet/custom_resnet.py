@@ -23,8 +23,6 @@ def train_model():
     model = ResNet50(input_tensor=image_input, include_top=False, weights='imagenet')
     last_layer = model.get_layer('avg_pool').output
     x = Flatten()(last_layer)
-    x = Dense(256, name='dense', activation='relu')(x)
-    x = Dropout(0.5)(x)
     out = Dense(5, name='output_layer', activation='softmax')(x)
 
     custom_resnet_model = Model(inputs=image_input, outputs=out)
@@ -39,17 +37,9 @@ def train_model():
                                        zoom_range=0.2,
                                        horizontal_flip=True,
                                        fill_mode='nearest')
-    
-    test_datagen = ImageDataGenerator(rescale=1./255)
 
     train_generator=train_datagen.flow_from_directory(
                                 config.TRAIN_DIR,
-                                target_size=(224, 224),
-                                batch_size=config.BATCH_SIZE,
-                                class_mode='sparse')
-
-    validation_generator=test_datagen.flow_from_directory(
-                                config.TEST_DIR,
                                 target_size=(224, 224),
                                 batch_size=config.BATCH_SIZE,
                                 class_mode='sparse')
@@ -71,7 +61,6 @@ def train_model():
         train_generator,
         steps_per_epoch=config.STEPS_PER_EPOCH,
         epochs=config.EPOCHS,
-        validation_data=validation_generator,
         callbacks=[tensorboard_callback]
     )
 

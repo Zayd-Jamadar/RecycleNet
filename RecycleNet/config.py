@@ -14,7 +14,7 @@ Hyper-parameters for Resnet50
 """
 EPOCHS = 12
 STEPS_PER_EPOCH = 30
-BATCH_SIZE = 12
+BATCH_SIZE = 32
 
 """
 Hyper-parameters for SVM
