@@ -3,9 +3,9 @@ DATASET_DIR = PACKAGE_ROOT + "dataset"
 TRAIN_DIR = DATASET_DIR + "/train"
 TEST_DIR = DATASET_DIR + "/test"
 
-TRAINED_MODEL_DIR_RESNET = PACKAGE_ROOT + "trained_models/partial"
-TRAINED_MODEL_DIR_SVM = PACKAGE_ROOT + "trained_models/ResNet_SVM"
-LOGS_DIR = PACKAGE_ROOT + "logs"
+TRAINED_MODEL_DIR_RESNET = PACKAGE_ROOT + "/trained_models/partial"
+TRAINED_MODEL_DIR_SVM = PACKAGE_ROOT + "/trained_models/ResNet_SVM"
+LOGS_DIR = PACKAGE_ROOT + "/logs"
 
 GRAPHDIR_CM = './imgs/graphs/confusion_matrix'
 

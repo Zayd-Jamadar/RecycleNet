@@ -1,8 +1,9 @@
 import os
 import time
 import numpy as np
-from sklearn.svm import SVC
+import matplotlib.pyplot as plt
 
+from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
