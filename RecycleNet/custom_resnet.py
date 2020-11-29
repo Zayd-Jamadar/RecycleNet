@@ -1,29 +1,24 @@
-TRAIN_DIR = './dataset/train'
-TEST_DIR = './dataset/test'
-LOGS_DIR = './logs/'
-EPOCHS = 12
-STEPS_PER_EPOCH = 30
-BATCH_SIZE = 32
-
 import os
 import datetime
 import time
 from resnet50 import ResNet50
 import matplotlib.pyplot as plt
+from RecycleNet.config import config
 
 import tensorflow as tf
-import tensorflow_addons as tfa
+# import tensorflow_addons as tfa
 from tensorflow import keras
 from keras.models import Model
 from keras.layers import Dense, Input, Activation, Flatten
 from keras.regularizers import l2
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
+
 nb_classes = 5
 image_input = Input(shape=(224, 224, 3))
 
 timestr = time.strftime("%Y-%m-%d_%H:%M:%S")
-GraphDir = './imgs/graphs/'
+
 
 partial_path = "./trained_models/partial/"
 
@@ -49,15 +44,15 @@ def train_model():
     test_datagen = ImageDataGenerator(rescale=1./255)
 
     train_generator=train_datagen.flow_from_directory(
-                                TRAIN_DIR,
+                                config.TRAIN_DIR,
                                 target_size=(224, 224),
-                                batch_size=BATCH_SIZE,
+                                batch_size=config.BATCH_SIZE,
                                 class_mode='sparse')
 
     validation_generator=test_datagen.flow_from_directory(
-                                TEST_DIR,
+                                config.TEST_DIR,
                                 target_size=(224, 224),
-                                batch_size=BATCH_SIZE,
+                                batch_size=config.BATCH_SIZE,
                                 class_mode='sparse')
 
     # opt = tfa.optimizers.SGDW(learning_rate = 0.01,
@@ -66,25 +61,25 @@ def train_model():
 
     opt = tf.keras.optimizers.SGD(learning_rate=0.01, momentum=0.9, nesterov=True, name='SGD')
 
-    log_dir = LOGS_DIR + datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+    log_dir = config.LOGS_DIR + datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 
     custom_resnet_model.compile(loss='sparse_categorical_crossentropy',
                                 optimizer=opt,
                                 metrics=['accuracy'],)
 
-    history = custom_resnet_model.fit(                    
+    custom_resnet_model.fit(                    
         train_generator,
-        steps_per_epoch=STEPS_PER_EPOCH,
-        epochs=EPOCHS,
+        steps_per_epoch=config.STEPS_PER_EPOCH,
+        epochs=config.EPOCHS,
         validation_data=validation_generator,
         callbacks=[tensorboard_callback]
     )
 
-    custom_resnet_model.save(partial_path)
+    custom_resnet_model.save(config.TRAINED_MODEL_DIR_RESNET)
 
 def get_model():
-    model = keras.models.load_model(partial_path)
+    model = keras.models.load_model(config.TRAINED_MODEL_DIR_RESNET)
     layer_name = 'res5c_branch2c'
     custom_resnet_model = Model(inputs=model.input, outputs=model.get_layer(layer_name).output)
     custom_resnet_model.summary()

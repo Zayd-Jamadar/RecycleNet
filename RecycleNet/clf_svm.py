@@ -9,6 +9,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from sklearn.metrics import plot_confusion_matrix
 
 from feature_extraction import extract_features
+from RecycleNet.config import config
 import pickle
 
 date_string = time.strftime("%Y-%m-%d-%H:%M")
@@ -19,10 +20,6 @@ MODEL_DIR = './trained_models/ResNet_SVM' + FILE_NAME
 GraphDir = './imgs/graphs/confusion_matrix'
 
 timestr = time.strftime("%Y-%m-%d_%H:%M:%S")
-
-C = 1000
-GAMMA = 0.5
-sample_count = 1050
 
 def plot_cm(clf_svm, X_test, y_test):
     np.set_printoptions(precision=2)
@@ -58,13 +55,13 @@ def plot_cf(y_pred, y_test):
 
 def train_svm():
     print(FILE_NAME)
-    svm_features, svm_labels = extract_features(DATASET_DIR,sample_count)
-    X = svm_features.reshape(sample_count, 7*7*2048)
+    svm_features, svm_labels = extract_features(DATASET_DIR,config.sample_count)
+    X = svm_features.reshape(config.sample_count, 7*7*2048)
     y = svm_labels
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    clf_svm = SVC(C=C, kernel='rbf', gamma=GAMMA)
+    clf_svm = SVC(C=config.C, kernel='rbf', gamma=config.GAMMA)
 
     print("Fitting the model...")
     clf_svm.fit(X_train, y_train)
