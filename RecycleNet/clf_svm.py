@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from feature_extraction import extract_features
+from RecycleNet.config import config
 import pickle
 
 date_string = time.strftime("%Y-%m-%d-%H:%M")
@@ -13,10 +14,6 @@ date_string = time.strftime("%Y-%m-%d-%H:%M")
 DATASET_DIR = './dataset/train'
 FILE_NAME = 'resnet_svm_' + date_string + '.sav'
 MODEL_DIR = './trained_models/' + FILE_NAME
-
-C = 1000
-GAMMA = 0.5
-sample_count = 1050
 
 def plot_cf(y_pred, y_test):
     print('\nAccuracy: {:.2f}\n'.format(accuracy_score(y_test, y_pred)))
@@ -35,13 +32,13 @@ def plot_cf(y_pred, y_test):
 
 def train_svm():
     print(FILE_NAME)
-    svm_features, svm_labels = extract_features(DATASET_DIR,sample_count)
-    X = svm_features.reshape(sample_count, 7*7*2048)
+    svm_features, svm_labels = extract_features(DATASET_DIR,config.sample_count)
+    X = svm_features.reshape(config.sample_count, 7*7*2048)
     y = svm_labels
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    clf_svm = SVC(C=C, kernel='rbf', gamma=GAMMA)
+    clf_svm = SVC(C=config.C, kernel='rbf', gamma=config.GAMMA)
 
     print("Fitting the model...")
     clf_svm.fit(X_train, y_train)
