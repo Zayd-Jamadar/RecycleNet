@@ -1,19 +1,41 @@
 import os
 import time
 import numpy as np
+import matplotlib.pyplot as plt
+
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import plot_confusion_matrix
+
 from feature_extraction import extract_features
 import config
+
 import pickle
 
 date_string = time.strftime("%Y-%m-%d-%H:%M")
 
-DATASET_DIR = './dataset/train'
 FILE_NAME = 'resnet_svm_' + date_string + '.sav'
-MODEL_DIR = './trained_models/' + FILE_NAME
+
+timestr = time.strftime("%Y-%m-%d_%H:%M:%S")
+
+def plot_cm(clf_svm, X_test, y_test):
+    np.set_printoptions(precision=2)
+
+    titles_options = [("Confusion matrix, without normalization", None),
+                      ("Normalized confusion matrix", "true")]
+    for title, normalize in titles_options:
+        disp = plot_confusion_matrix(clf_svm, X_test, y_test,
+                                     cmap=plt.cm.Blues,
+                                     normalize=normalize)
+        disp.ax_.set_title(title)
+
+        print(title)
+        print(disp.confusion_matrix)
+
+    plt.savefig(config.GRAPHDIR_CM+timestr)
+    plt.show()
 
 def plot_cf(y_pred, y_test):
     print('\nAccuracy: {:.2f}\n'.format(accuracy_score(y_test, y_pred)))
@@ -32,7 +54,7 @@ def plot_cf(y_pred, y_test):
 
 def train_svm():
     print(FILE_NAME)
-    svm_features, svm_labels = extract_features(DATASET_DIR,config.sample_count)
+    svm_features, svm_labels = extract_features(config.TRAIN_DIR,config.sample_count)
     X = svm_features.reshape(config.sample_count, 7*7*2048)
     y = svm_labels
 
@@ -43,13 +65,15 @@ def train_svm():
     print("Fitting the model...")
     clf_svm.fit(X_train, y_train)
 
-    os.makedirs(os.path.dirname(MODEL_DIR), exist_ok=True)
-    pickle.dump(clf_svm, open(MODEL_DIR, 'wb'))
+    os.makedirs(os.path.dirname(config.TRAINED_MODEL_DIR_SVM+FILE_NAME), exist_ok=True)
+    pickle.dump(clf_svm, open(config.TRAINED_MODEL_DIR_SVM+FILE_NAME, 'wb'))
 
     y_pred = clf_svm.predict(X_test)
 
     print("Model is trained. Plotting metrics...")
     plot_cf(y_pred, y_test)
+
+    plot_cm(clf_svm, X_test, y_test)
 
 if __name__ == '__main__':
     print('Now training the extracted features on SVM...')

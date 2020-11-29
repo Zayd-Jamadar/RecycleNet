@@ -2,7 +2,9 @@ import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
 from keras.layers import Input
 from custom_resnet import get_model
+
 import config
+
 
 image_input = Input(shape=(224, 224, 3))
 model = get_model()
@@ -11,7 +13,7 @@ datagen = ImageDataGenerator(rescale=1./255)
 
 def extract_features(directory, sample_count):
     features = np.zeros(shape=(sample_count,7,7,2048))
-    labels = np.zeros(shape=(sample_count,5))
+    labels = np.zeros(shape=(sample_count))
     
     generator = datagen.flow_from_directory(directory,
                                             target_size=(config.IMG_WIDTH, config.IMG_HEIGHT),
