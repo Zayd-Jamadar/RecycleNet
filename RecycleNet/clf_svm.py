@@ -129,5 +129,6 @@ def train_ovr():
 
 if __name__ == '__main__':
     print('Now training the extracted features on SVM...')
-    train_svm()
+    # train_svm()
     # grid_search()
+    train_ovr()
