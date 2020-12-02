@@ -10,6 +10,8 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from sklearn.metrics import plot_confusion_matrix
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
+from sklearn.multiclass import OneVsRestClassifier 
+
 
 from feature_extraction import extract_features
 import config
@@ -104,7 +106,26 @@ def grid_search():
     grid_predictions = grid.predict(X_test) 
   
     # print classification report 
-    print(classification_report(y_test, grid_predictions)) 
+    print(classification_report(y_test, grid_predictions))
+
+def train_ovr():
+    
+    svm_features, svm_labels = extract_features(config.TRAIN_DIR,config.sample_count)
+    X = svm_features.reshape(config.sample_count, 7*7*2048)
+    y = svm_labels
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    clf_svm = SVC(C=config.C, kernel='rbf', gamma=config.GAMMA)
+    clf = OneVsRestClassifier(clf_svm).fit(X_train, y_train)
+
+    y_pred = clf.predict(X_test)
+
+    print("Model is trained. Plotting metrics...")
+    plot_cf(y_pred, y_test)
+
+    plot_cm(clf, X_test, y_test)
+
 
 if __name__ == '__main__':
     print('Now training the extracted features on SVM...')
